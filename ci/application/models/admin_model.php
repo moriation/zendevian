@@ -14,10 +14,32 @@ class Admin_model extends CI_Model
 		return $query;
 	}
 	
+	function getNonLightAgents($table)
+	{
+		$data = array(
+		               'is_lightagent' => FALSE,
+		               'rr_status' => FALSE
+		            );
+		$query = $this->db->get_where($table, $data);
+		return $query->result();
+	}
+	
 	function get_data_where($table, $field, $id)
 	{
 		$query = $this->db->get_where($table, array($field => $id));
 		return $query->result();
+	}
+	
+	function markLightAgents($table, $userid)
+	{
+		$data = array(
+		               'is_lightagent' => TRUE
+		            );
+		
+		$this->db->where('userid', $userid);
+		$result = $this->db->update('agents', $data); 
+	
+		return $result;
 	}
 	
 	function populateAgentsTable($table, $name, $userid)
