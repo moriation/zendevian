@@ -11,14 +11,40 @@ class Admin_model extends CI_Model
 	{
 		$query = $this->db->get($table);
 		
-		/*
-		foreach ($query->result() as $row)
-		{
-		    echo $row->name;
-		}
-		*/
-		
 		return $query;
+	}
+	
+	function get_data_where($table, $field, $id)
+	{
+		$query = $this->db->get_where($table, array($field => $id));
+		return $query->result();
+	}
+	
+	function populateAgentsTable($table, $name, $userid)
+	{
+		$query = $this->db->get_where($table, array('userid' => $userid));
+		$result = $query->result();
+		
+		if(empty($result))
+		{
+			$data = array(
+			   'name' => $name ,
+			   'userid' => $userid ,
+			   'rr_status' => FALSE
+			);
+			
+			$this->db->insert($table, $data); 		
+		}
+		else
+		{
+			//do something
+		}		
+	}
+	
+	function update_data($table, $field, $id)
+	{
+		$result = $this->db->update($table, $_POST, array($field => $id));
+		return $result->result();
 	}
 	
 	/*
@@ -64,11 +90,6 @@ class Admin_model extends CI_Model
 		return $query;
 	}
 	
-	function get_data_where($table, $field, $id)
-	{
-		$query = $this->db->get_where($table, array($field => $id));
-		return $query;
-	}
 	
 	function del_data($table, $id)
 	{		
@@ -87,11 +108,6 @@ class Admin_model extends CI_Model
 		unlink('www/images/models/1/med/' . $filename);
 	}
 	
-	function update_data($table, $field, $id)
-	{
-		$result = $this->db->update($table, $_POST, array($field => $id));
-		return $result;
-	}
 	
 	function set_default_img($id, $filename)
 	{

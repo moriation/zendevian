@@ -41,9 +41,15 @@ class Target extends CI_Controller
 				for($x=0; $x<count($val); $x++)
 				{
 					echo "Agent: " . $val[$x]->name . " (" . $val[$x]->id . ") -- " . $val[$x]->role . "<br>";
+					//$this->initializeDB('agents', $val[$x]->name, $val[$x]->id); //uncomment to intitialize user db				
 				}	
 			}
 		}
+	}
+	
+	public function initializeDB($table, $name, $id)
+	{
+		$data = $this->admin_model->populateAgentsTable($table, $name, $id);
 	}
 	
 	function deleteTopic($id)
