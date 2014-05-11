@@ -20,7 +20,7 @@ class Admin_model extends CI_Model
 		               'is_lightagent' => FALSE,
 		               'rr_status' => FALSE
 		            );
-		$query = $this->db->get_where($table, $data);
+		$query = $this->db->get_where($table, $data, 1);
 		return $query->result();
 	}
 	
@@ -38,6 +38,13 @@ class Admin_model extends CI_Model
 		
 		$this->db->where('userid', $userid);
 		$result = $this->db->update('agents', $data); 
+	
+		return $result;
+	}
+	
+	function deleteLightAgents($table, $id)
+	{	
+		$result = $this->db->delete($table, array('userid' => $id)); 
 	
 		return $result;
 	}
@@ -65,8 +72,38 @@ class Admin_model extends CI_Model
 	
 	function update_data($table, $field, $id)
 	{
-		$result = $this->db->update($table, $_POST, array($field => $id));
-		return $result->result();
+		$result = $this->db->update($table, array($field => $id));
+		return $result;
+	}
+	
+	function update_data_where($table, $field, $id, $where_field, $userid)
+	{
+		$data = array(
+		  $field => $id
+			);
+		$this->db->where($where_field, $userid);
+		$this->db->update($table, $data);
+		
+		//$this->db->last_query(); exit;
+	}
+	
+	function get_next_Agent($id)
+	{
+		$data = $this->db->query('SELECT * FROM agents WHERE id > ' . $id . ' ORDER BY id LIMIT 1');
+		return $data->result();
+	}
+	
+	
+	function get_last_record($table)
+	{
+		$data = $this->db->query('SELECT * FROM agents ORDER BY id DESC LIMIT 1');
+		return $data->result();
+	}
+	
+	function get_first_record($table)
+	{
+		$data = $this->db->query('SELECT * FROM agents ORDER BY id ASC LIMIT 1');
+		return $data->result();
 	}
 	
 	/*
