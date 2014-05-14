@@ -17,11 +17,13 @@ class Target extends CI_Controller
 		//error_reporting(1);
 		require("curl.php");
 		
-		//$this->getAgents(); //	//first, get list of ALL agents, including admins and owners; this function will populate agents table as well 
+		//first, get list of ALL agents, including admins and owners; this function will populate agents table as well 
+		//$this->getAgents(); 
 		
+		//since table is constructed proceed with ticket assignment
 		$this->assignToAgent();
 		
-		$data = $this->admin_model->getAgentsDB('agents');
+		//$data = $this->admin_model->getAgentsDB('agents');
 	}
 
 	public function getAgents()
@@ -111,7 +113,6 @@ class Target extends CI_Controller
 		$non_lightagents = $this->admin_model->getNonLightAgents('agents'); //get next non-light agent data to assign ticket	
 		$this->assignTicket($non_lightagents[0]->userid);		
 		$this->admin_model->update_data_where('agents','rr_status',TRUE, 'userid' , $non_lightagents[0]->userid);
-		echo "DSDS";
 	}
 	
 	public function assignToNext()
